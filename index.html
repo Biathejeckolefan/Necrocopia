@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Necrocopia</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #B00B00;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #content {
+            width: 800px;
+            margin: 0 auto;
+        }
+
+        #banner {
+            margin-top: 50px;
+        }
+
+        #banner h1 {
+            font-size: 48px;
+            margin: 0;
+        }
+
+        #nav {
+            margin: 20px 0;
+        }
+
+        #nav a {
+            color: #B00B00;
+            text-decoration: none;
+            font-size: 20px;
+        }
+
+        #nav a:hover {
+            text-decoration: underline;
+        }
+
+        #page-content {
+            background-color: #222;
+            padding: 20px;
+            border: 1px solid #B00B00;
+        }
+
+        #image img {
+            width: 100%;
+            border: 2px solid #B00B00;
+        }
+
+        #text {
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: left;
+            padding: 10px;
+        }
+
+        #footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #B00B00;
+        }
+
+        #characters-container {
+            display: inline-block;
+            position: relative;
+        }
+
+        #characters {
+            color: #B00B00;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        #tooltip {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #222;
+            color: #B00B00;
+            padding: 5px 10px;
+            border: 1px solid #B00B00;
+            font-size: 14px;
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        #characters-container:hover #tooltip {
+            display: block;
+        }
+
+        /* Speech bubble styling */
+        .bubble {
+            position: fixed;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            padding: 10px 20px;
+            opacity: 0;
+            font-size: 18px;
+            max-width: 300px;
+            word-wrap: break-word;
+            white-space: normal;
+            text-align: center;
+            z-index: 9999;
+            border: 2px solid #B00B00;
+            animation: fadeInUp 3s forwards;
+            box-sizing: border-box;
+            transition: opacity 0.5s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(100%);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pop {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.3);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        .bubble:nth-of-type(1) {
+            animation-delay: 0s;
+        }
+
+        .bubble:nth-of-type(2) {
+            animation-delay: 1s;
+        }
+
+        .bubble:nth-of-type(3) {
+            animation-delay: 2s;
+        }
+    </style>
+</head>
+<body>
+    <div id="content">
+        <div id="banner">
+            <h1>Necrocopia</h1>
+        </div>
+        <div id="nav">
+            <a href="https://mspfa.com/?s=59263&p=1">Start Reading</a> | 
+            <a href="https://mspfa.com/log/?s=59263">Archive</a> | 
+            <div id="characters-container">
+                <span id="characters">Characters</span>
+                <div id="tooltip">Coming Soon</div>
+            </div> | 
+            <a href="mailto:biathejeckolefan@gmail.com">Inquiries</a> 
+        </div>
+        <div id="page-content">
+            <div id="image">
+                <img src="your-image.png" alt="Comic Page Image">
+            </div>
+            <!-- Add the thought divs here -->
+            <div id="thought">buda buda buda ba ba baa baaa baaaaaaaaaaaa buuuuuuuuuuuuuuuuuuuuuu hhhhhhhhhhhhhh</div>
+            <div id="thought">This is the first speech bubble.</div>
+            <div id="thought">This is the second speech bubble.</div>
+            <div id="thought">This is the third speech bubble.</div>
+        </div>
+        <div id="footer">
+            <p>&copy; 2024 BiaBia inc. Homestuck is a property of Andrew Hussie.</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const thoughts = document.querySelectorAll("#thought");
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
+
+            thoughts.forEach((thought, index) => {
+                const bubble = document.createElement("div");
+                bubble.classList.add("bubble");
+
+                // Typewriter effect
+                const text = thought.innerText;
+                let currentIndex = 0;
+
+                function typeWriter() {
+                    if (currentIndex < text.length) {
+                        // Add the next character, including spaces
+                        bubble.innerHTML += text.charAt(currentIndex) === ' ' ? '&nbsp;' : text.charAt(currentIndex);
+                        currentIndex++;
+                        setTimeout(typeWriter, 50); // Delay between each letter
+                    }
+                }
+
+                // Random position, ensuring bubbles stay within screen boundaries
+                const randomLeft = Math.random() * (screenWidth - 320); // Prevent going off the right edge
+                const randomTop = Math.random() * (screenHeight - 200); // Prevent going off the top edge
+
+                bubble.style.left = `${randomLeft}px`;
+                bubble.style.top = `${randomTop}px`;
+
+                document.body.appendChild(bubble);
+
+                // Add the click event to trigger the "pop" animation
+                bubble.addEventListener('click', () => {
+                    bubble.style.animation = "pop 0.3s ease-out forwards";
+                    setTimeout(() => bubble.remove(), 300); // Remove after pop animation
+                });
+
+                // Start typewriter effect after a delay for each bubble
+                setTimeout(typeWriter, index * 1000);
+
+                // Remove the original "thought" element to prevent it from appearing on the page
+                thought.remove();
+            });
+        });
+    </script>
+</body>
+</html>
